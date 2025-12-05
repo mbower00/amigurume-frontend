@@ -1,11 +1,9 @@
 <script setup></script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <v-file-input></v-file-input>
+  <v-alert>heroo</v-alert>
+  <h1 class="fancy-font">asdf</h1>
 </template>
 
 <style scoped></style>
