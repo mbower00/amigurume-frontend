@@ -1,9 +1,21 @@
-<script setup></script>
+<script setup>
+import NavBar from './components/NavBar.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+</script>
 
 <template>
-  <v-file-input></v-file-input>
-  <v-alert>heroo</v-alert>
-  <h1 class="fancy-font">asdf</h1>
+  <nav-bar class="nav-bar" v-if="route.name !== 'login'"></nav-bar>
+  <div class="view">
+    <router-view></router-view>
+  </div>
+  <!-- TODO: add alert for error/success, if time -->
 </template>
 
-<style scoped></style>
+<style scoped>
+.nav-bar {
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+}
+</style>
