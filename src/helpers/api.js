@@ -26,14 +26,34 @@ export async function loginUser(username = null, password = null) {
       )
     }
   } catch (error) {
-    throw new Error(error.response.data.message)
-  }
-  if (response.data.clearance !== 'admin') {
-    throw new Error('You must be an admin to access this site.')
+    throw new Error(error?.response?.data?.message)
   }
   userStore.access = response.data.access
   userStore.username = response.data.username
+  userStore.email = response.data.email
   return response
+}
+
+export async function signUpUser(username, email, password) {
+  const userStore = useUserStore()
+  let response
+  try {
+    // using code copied from ChatGPT https://chatgpt.com/c/6931f18d-5adc-832b-9dfd-92684712c285
+    response = await axios.post(
+      `${baseURL}/user/sign-up`,
+      {
+        username,
+        password,
+        email,
+      },
+      { withCredentials: true },
+    )
+  } catch (error) {
+    throw new Error(error.response.data.message)
+  }
+  userStore.access = response.data.access
+  userStore.username = response.data.username
+  userStore.email = response.data.email
 }
 
 export async function logoutUser(router) {

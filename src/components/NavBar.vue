@@ -22,38 +22,39 @@ async function logout() {
 
 <template>
   <div class="bar flex">
-    <router-link to="orders" class="title fancy-font">AmiguruMe</router-link>
+    <router-link to="/" class="title fancy-font">AmiguruMe</router-link>
     <nav class="links flex">
-      <router-link to="home" active-class="active">Home</router-link>
-      <router-link to="Browse" active-class="active">Browse</router-link>
+      <router-link to="/" active-class="active">Home</router-link>
+      <router-link to="browse" active-class="active">Browse</router-link>
     </nav>
     <div class="user-area flex">
-      <router-link to="user" active-class="active">
+      <router-link v-if="userStore.isLoggedIn" to="user" class="username-and-btn">
         <span class="username">{{ userStore.username }}</span>
-        <v-btn
-          density="compact"
-          class="logout-btn"
-          variant="text"
-          :loading="logoutLoading"
-          icon="fa-solid fa-user"
-        ></v-btn>
+        <v-btn density="compact" class="btn" variant="text" icon="fa-solid fa-user"></v-btn>
       </router-link>
       <v-btn
         density="compact"
-        class="logout-btn"
+        class="btn"
         variant="text"
         :loading="logoutLoading"
         icon="fas fa-sign-out-alt"
         @click="logout"
+        v-if="userStore.isLoggedIn"
       ></v-btn>
-      <router-link to="cart" active-class="active">
+      <router-link to="login" v-else>
         <v-btn
           density="compact"
-          class="logout-btn"
+          class="btn"
           variant="text"
-          :loading="logoutLoading"
+          icon="fa-solid fa-right-to-bracket"
+        ></v-btn>
+      </router-link>
+      <router-link to="cart">
+        <v-btn
+          density="compact"
+          class="btn"
+          variant="text"
           icon="fa-solid fa-cart-shopping"
-          @click="logout"
         ></v-btn>
       </router-link>
     </div>
@@ -90,7 +91,12 @@ a {
 .active {
   text-decoration: underline;
 }
-.logout-btn {
+.username-and-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn {
   font-size: 10px;
 }
 .username {

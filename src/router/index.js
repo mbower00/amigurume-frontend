@@ -9,7 +9,6 @@ import { loginUser } from '@/helpers/api'
 
 async function requireAuth() {
   const userStore = useUserStore()
-  console.log('s')
   if (userStore.isLoggedIn) {
     // Already logged in, success
     return true
