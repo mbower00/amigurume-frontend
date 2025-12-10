@@ -86,6 +86,21 @@ export async function logoutUser(router) {
   }
 }
 
+export async function call(route, method = 'get', body = null, headers = {}) {
+  try {
+    const res = await axios({
+      baseURL,
+      method,
+      url: route,
+      data: body,
+      headers,
+    })
+  } catch (error) {
+    throw error
+  }
+  res.data
+}
+
 export async function authCall(
   route,
   router,
