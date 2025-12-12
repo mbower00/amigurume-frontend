@@ -1,15 +1,22 @@
 <script setup>
-import { computed, defineProps, ref } from 'vue'
+import { computed, defineProps, ref, watch } from 'vue'
+import { useCartStore } from '@/stores/cart'
+
 const prop = defineProps(['product'])
+
+const cartStore = useCartStore()
+
+const quantity = computed(() => cartStore.cart?.[prop.product.id] || 0)
 
 const inStock = computed(() => prop.product.stock > 0)
 
-const quantity = ref(inStock.value ? 1 : 0)
-
-console.log(prop.product.stock > 0)
-
 function addToVisualizer() {}
-function addToCart() {}
+function addToCart() {
+  cartStore.addToCart(prop.product.id)
+}
+function subtractFromCart() {
+  cartStore.subtractFromCart(prop.product.id)
+}
 </script>
 
 <template>
@@ -38,38 +45,36 @@ function addToCart() {}
       <v-chip class="stock-chip" variant="text" :color="inStock ? 'var(--dark-green)' : '#999'">{{
         inStock ? `${prop.product.stock} in stock` : 'out of stock'
       }}</v-chip>
-      <v-btn
-        @click="quantity -= 1"
-        class="math-icon"
-        density="compact"
-        color="var(--light-blackberry)"
-        icon="fa-solid fa-minus"
-        :disabled="!inStock || quantity <= 1"
-      ></v-btn>
-      <v-badge
-        location="top right"
-        :dot="!inStock"
-        text-color="white"
-        :color="inStock ? 'var(--lilac)' : 'transparent'"
-        :content="quantity"
-      >
+
+      <div class="add-container">
         <v-btn
-          @click="addToCart"
-          variant="text"
-          :disabled="!inStock || quantity < 1"
-          icon="fa-solid fa-cart-plus"
-          class="lilac"
+          @click="subtractFromCart"
+          class="math-icon"
+          density="compact"
+          color="var(--light-blackberry)"
+          icon="fa-solid fa-minus"
+          :disabled="quantity <= 0"
+          v-if="quantity"
+        ></v-btn>
+
+        <v-badge
+          location="top right"
+          :dot="!Boolean(quantity)"
+          text-color="white"
+          :color="quantity ? 'var(--blackberry)' : 'transparent'"
+          :content="quantity"
         >
-        </v-btn>
-      </v-badge>
-      <v-btn
-        @click="quantity += 1"
-        class="math-icon"
-        density="compact"
-        color="var(--dark-green)"
-        icon="fa-solid fa-plus"
-        :disabled="!inStock || quantity >= prop.product.stock"
-      ></v-btn>
+          <v-btn
+            @click="addToCart"
+            variant="text"
+            :disabled="!inStock || quantity >= prop.product.stock"
+            icon="fa-solid fa-cart-plus"
+            class="lilac"
+          >
+          </v-btn>
+        </v-badge>
+      </div>
+
       <v-chip class="price-chip" variant="text" color="var(--lilac)"
         >${{ prop.product.price.toFixed(2) }}</v-chip
       >
@@ -112,8 +117,17 @@ img {
 .lilac {
   color: var(--lilac);
 }
+.add-container {
+  position: relative;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .math-icon {
+  position: absolute;
   font-size: xx-small;
+  left: 0px;
 }
 .price-chip,
 .stock-chip,

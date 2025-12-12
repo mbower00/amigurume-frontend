@@ -1,10 +1,12 @@
 <script setup>
 import { logoutUser } from '@/helpers/api'
 import { useUserStore } from '@/stores/user'
+import { useCartStore } from '@/stores/cart'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
+const cartStore = useCartStore()
 const router = useRouter()
 const logoutLoading = ref(false)
 
@@ -50,12 +52,22 @@ async function logout() {
         ></v-btn>
       </router-link>
       <router-link to="cart">
-        <v-btn
-          density="compact"
-          class="btn"
-          variant="text"
-          icon="fa-solid fa-cart-shopping"
-        ></v-btn>
+        <v-badge
+          location="top right"
+          :dot="!Boolean(cartStore.totalQuantity)"
+          text-color="white"
+          :color="cartStore.totalQuantity ? 'var(--blackberry)' : 'transparent'"
+          :content="cartStore.totalQuantity"
+          offset-x="2"
+          offset-y="2"
+        >
+          <v-btn
+            density="compact"
+            class="btn"
+            variant="text"
+            icon="fa-solid fa-cart-shopping"
+          ></v-btn>
+        </v-badge>
       </router-link>
     </div>
   </div>
@@ -105,6 +117,9 @@ a {
 @media (max-width: 600px) {
   .title {
     font-size: medium;
+  }
+  .bar {
+    padding: 9px 20px;
   }
 }
 @media (max-width: 450px) {
