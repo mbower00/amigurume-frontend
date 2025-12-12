@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { authCall } from '@/helpers/api'
+import { authCall, logoutUser } from '@/helpers/api'
 import { formatDate } from '@/helpers/date'
 import { useRouter } from 'vue-router'
 
@@ -9,6 +9,7 @@ const userStore = useUserStore()
 const router = useRouter()
 const orders = ref(null)
 const loadingOrders = ref(true)
+const logoutLoading = ref(false)
 
 onMounted(async () => {
   try {
@@ -36,7 +37,10 @@ function getTotalQuantity(order) {
 }
 
 function getTotalPrice(order) {
-  return order.ordered_products.reduce((price, product) => price + product.product.price, 0)
+  return order.ordered_products.reduce(
+    (price, product) => price + product.product.price * product.quantity,
+    0,
+  )
 }
 </script>
 
@@ -169,9 +173,10 @@ function getTotalPrice(order) {
   gap: 15px;
 }
 .product-img {
-  width: 60px;
-  height: 100%;
-  border-radius: 4px;
+  width: auto;
+  height: auto;
+  max-width: 60px;
+  max-height: 60px;
 }
 .order-card {
   margin-bottom: 15px;

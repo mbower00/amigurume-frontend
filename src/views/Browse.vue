@@ -68,14 +68,17 @@ onMounted(async () => {
     top: 0;
   }
 }
-
-@media (max-width: 1000px) {
+@media (max-width: 1120px) {
   .container {
     grid-template-columns: 1fr;
   }
   .visualizer-card {
     position: initial;
     grid-row-start: 1;
+  }
+  .product-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
   }
 }
 </style>

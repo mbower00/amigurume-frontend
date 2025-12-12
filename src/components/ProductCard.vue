@@ -82,11 +82,16 @@ function addToCart() {}
   /* padding: 15px; */
   height: min-content;
   position: relative;
+  max-width: 400px;
+  width: 100%;
 }
 img {
   margin: 16px auto 8px auto;
   display: block;
   max-width: 200px;
+  height: auto;
+  width: auto;
+  max-height: 200px;
 }
 .img-placeholder {
   width: 150px;
