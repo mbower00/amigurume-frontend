@@ -87,8 +87,9 @@ export async function logoutUser(router) {
 }
 
 export async function call(route, method = 'get', body = null, headers = {}) {
+  let res
   try {
-    const res = await axios({
+    res = await axios({
       baseURL,
       method,
       url: route,
@@ -98,7 +99,7 @@ export async function call(route, method = 'get', body = null, headers = {}) {
   } catch (error) {
     throw error
   }
-  res.data
+  return res?.data
 }
 
 export async function authCall(
@@ -144,7 +145,7 @@ export async function authCall(
       if (!recurred) {
         // recur this function (only once)
         const res = await authCall(route, router, method, body, headers, true)
-        return res.data
+        return res
       } else {
         throw error
       }
