@@ -22,10 +22,10 @@ onMounted(async () => {
 <template>
   <v-container class="container">
     <div v-if="loadingProducts" class="product-grid">
-      <v-skeleton-loader type="card"></v-skeleton-loader>
-      <v-skeleton-loader type="card"></v-skeleton-loader>
-      <v-skeleton-loader type="card"></v-skeleton-loader>
-      <v-skeleton-loader type="card"></v-skeleton-loader>
+      <v-skeleton-loader class="skele" type="card"></v-skeleton-loader>
+      <v-skeleton-loader class="skele" type="card"></v-skeleton-loader>
+      <v-skeleton-loader class="skele" type="card"></v-skeleton-loader>
+      <v-skeleton-loader class="skele" type="card"></v-skeleton-loader>
     </div>
     <div v-else>
       <p v-if="!products || products.length === 0" style="text-align: center">
@@ -54,23 +54,30 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+  justify-items: center;
+  width: 100%;
 }
 
 .container {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 30px;
-  max-width: 1400px;
+  grid-template-columns: 1fr 318px;
+  /* width: max-content; */
+  max-width: 1300px;
+  /* justify-items: center; */
 }
 
 .visualizer-card {
   height: 400px;
+  width: 288px;
   position: sticky;
   top: 82px;
   max-width: 600px;
-  justify-self: center;
-  width: 100%;
+  margin: 0 0 30px 30px;
   /* background-color: #ddd; */
+}
+.skele {
+  max-width: 400px;
+  width: 100%;
 }
 
 @media (max-height: 500px) {
@@ -86,6 +93,8 @@ onMounted(async () => {
   .visualizer-card {
     position: initial;
     grid-row-start: 1;
+    margin: 0 0 30px 0;
+    justify-self: center;
   }
   .product-grid {
     grid-template-columns: 1fr;
