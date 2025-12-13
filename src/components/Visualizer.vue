@@ -11,7 +11,7 @@
 
 <script setup>
 import { useVisualizerStore } from '@/stores/visualizer'
-import { onMounted, useTemplateRef, ref, watch } from 'vue'
+import { onMounted, onUnmounted, useTemplateRef, ref, watch } from 'vue'
 
 const vStore = useVisualizerStore()
 const canvasWidth = ref(288)
@@ -26,6 +26,8 @@ const startX = ref(0)
 const startY = ref(0)
 const offsetX = ref(0)
 const offsetY = ref(0)
+const listenerScroll = ref(null)
+const listenerResize = ref(null)
 
 onMounted(() => {
   ctx.value = canvas.value.getContext('2d')
@@ -44,8 +46,16 @@ onMounted(() => {
     mouseMove(event, true)
   }
   getOffset()
+
+  listenerScroll.value = window.addEventListener('scroll', getOffset)
+  listenerResize.value = window.addEventListener('resize', getOffset)
   // TODO: Make double click flip/rotate
   // canvas.value.ondblclick = doubleClick
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', listenerScroll.value)
+  window.removeEventListener('resize', listenerResize.value)
 })
 
 watch(vStore.images, (images) => {
@@ -87,11 +97,7 @@ function getOffset() {
   const offsets = canvas.value.getBoundingClientRect()
   offsetX.value = offsets.left
   offsetY.value = offsets.top
-  console.log(offsetX.value, offsetY.value)
 }
-
-window.onscroll = getOffset
-window.onresize = getOffset
 
 function drawSprites() {
   ctx.value.clearRect(0, 0, canvasWidth.value, canvasHeight.value)
