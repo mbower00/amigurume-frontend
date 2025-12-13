@@ -10,15 +10,16 @@
 -->
 
 <script setup>
+import { useVisualizerStore } from '@/stores/visualizer'
 import { onMounted, useTemplateRef, ref, watch } from 'vue'
 
-const prop = defineProps(['images'])
+const vStore = useVisualizerStore()
 const canvasWidth = ref(288)
 const canvasHeight = ref(400)
 const canvas = useTemplateRef('canvas')
 const ctx = ref(null)
 const savedImages = ref([])
-const sprites = ref([])
+// const sprites = ref([])
 const isDragging = ref(false)
 const draggingSpriteIndex = ref(0)
 const startX = ref(0)
@@ -47,7 +48,7 @@ onMounted(() => {
   // canvas.value.ondblclick = doubleClick
 })
 
-watch(prop.images, (images) => {
+watch(visualizerStore.images, (images) => {
   const save = [...savedImages.value]
   // console.log('SAVE', save, 'IMAGES', images)
   for (let img of images) {
@@ -61,7 +62,7 @@ watch(prop.images, (images) => {
       const imgElement = new Image()
       imgElement.src = img
       imgElement.addEventListener('load', () => {
-        sprites.value.push({
+        vStore.sprites.push({
           element: imgElement,
           x: 15,
           y: 15,
@@ -76,6 +77,12 @@ watch(prop.images, (images) => {
   savedImages.value = [...images]
 })
 
+function clearVisualizer() {
+  vStore.images = []
+  vStore.sprites = []
+  drawSprites()
+}
+
 function getOffset() {
   const offsets = canvas.value.getBoundingClientRect()
   offsetX.value = offsets.left
@@ -88,7 +95,7 @@ window.onresize = getOffset
 
 function drawSprites() {
   ctx.value.clearRect(0, 0, canvasWidth.value, canvasHeight.value)
-  for (let sprite of sprites.value) {
+  for (let sprite of vStore.sprites) {
     // if (sprite.flip) {
     //   ctx.value.save()
     //   ctx.value.rotate((Math.PI / 180) * )
@@ -119,7 +126,7 @@ function mouseDown(event, touching) {
     startY.value = event.clientY - offsetY.value
   }
   // reverse, so you favor the top sprite
-  const reverseSprites = [...sprites.value].reverse()
+  const reverseSprites = [...vStore.sprites].reverse()
   let index = reverseSprites.length - 1
   for (let sprite of reverseSprites) {
     if (isMouseInSprite(startX.value, startY.value, sprite)) {
@@ -156,10 +163,10 @@ function mouseMove(event, touching) {
   let distanceY = mouseY - startY.value
 
   // move the sprite and move it to top layer
-  const sprite = sprites.value.splice(draggingSpriteIndex.value, 1)[0]
+  const sprite = vStore.sprites.value.splice(draggingSpriteIndex.value, 1)[0]
   sprite.x += distanceX
   sprite.y += distanceY
-  draggingSpriteIndex.value = sprites.value.push(sprite) - 1
+  draggingSpriteIndex.value = vStore.sprites.value.push(sprite) - 1
 
   drawSprites()
 
@@ -186,7 +193,14 @@ function mouseMove(event, touching) {
 </script>
 
 <template>
+  <v-btn class="clear" icon="fa-solid fa-x" variant="flat" @click="clearVisualizer"></v-btn>
   <canvas ref="canvas" width="288" height="400"></canvas>
 </template>
 
-<style scoped></style>
+<style scoped>
+.clear {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+</style>

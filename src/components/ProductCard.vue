@@ -1,18 +1,19 @@
 <script setup>
 import { computed, defineProps, ref, watch } from 'vue'
 import { useCartStore } from '@/stores/cart'
+import { useVisualizerStore } from '@/stores/visualizer'
 
 const prop = defineProps(['product'])
-const emit = defineEmits(['addToVisualizer'])
 
 const cartStore = useCartStore()
+const vStore = useVisualizerStore()
 
 const quantity = computed(() => cartStore.cart?.[prop.product.id] || 0)
 
 const inStock = computed(() => prop.product.stock > 0)
 
 function addToVisualizer() {
-  emit('addToVisualizer', prop.product.image_url)
+  vStore.images.push(prop.product.image_url)
 }
 function addToCart() {
   cartStore.addToCart(prop.product.id)

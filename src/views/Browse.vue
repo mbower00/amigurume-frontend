@@ -6,7 +6,6 @@ import Visualizer from '@/components/Visualizer.vue'
 
 const products = ref(null)
 const loadingProducts = ref(true)
-const visualizerImages = ref([])
 
 onMounted(async () => {
   try {
@@ -32,19 +31,13 @@ onMounted(async () => {
         No products found. Come back later!
       </p>
       <div v-else class="product-grid">
-        <product-card
-          v-for="product in products"
-          :product
-          @add-to-visualizer="
-            (url) => {
-              visualizerImages.push(url)
-            }
-          "
-        ></product-card>
+        <product-card v-for="product in products" :product></product-card>
       </div>
     </div>
     <v-card class="visualizer-card">
-      <visualizer :images="visualizerImages"></visualizer>
+      <div class="relative">
+        <visualizer></visualizer>
+      </div>
     </v-card>
   </v-container>
 </template>
@@ -64,6 +57,10 @@ onMounted(async () => {
   /* width: max-content; */
   max-width: 1300px;
   /* justify-items: center; */
+}
+
+.relative {
+  position: relative;
 }
 
 .visualizer-card {
