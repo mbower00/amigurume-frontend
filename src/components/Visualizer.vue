@@ -93,8 +93,7 @@ watch(vStore.images, (images) => {
 })
 
 function clearVisualizer() {
-  vStore.images = []
-  vStore.sprites = []
+  vStore.empty()
   drawSprites()
   console.log('del')
 }
