@@ -2,9 +2,11 @@
 import { ref, onMounted } from 'vue'
 import { call } from '@/helpers/api'
 import ProductCard from '@/components/ProductCard.vue'
+import Visualizer from '@/components/Visualizer.vue'
 
 const products = ref(null)
 const loadingProducts = ref(true)
+const visualizerImages = ref([])
 
 onMounted(async () => {
   try {
@@ -30,10 +32,20 @@ onMounted(async () => {
         No products found. Come back later!
       </p>
       <div v-else class="product-grid">
-        <product-card v-for="product in products" :product></product-card>
+        <product-card
+          v-for="product in products"
+          :product
+          @add-to-visualizer="
+            (url) => {
+              visualizerImages.push(url)
+            }
+          "
+        ></product-card>
       </div>
     </div>
-    <v-card class="visualizer-card"> </v-card>
+    <v-card class="visualizer-card">
+      <visualizer :images="visualizerImages"></visualizer>
+    </v-card>
   </v-container>
 </template>
 
@@ -58,8 +70,7 @@ onMounted(async () => {
   max-width: 600px;
   justify-self: center;
   width: 100%;
-  background-color: #ddd;
-  /* border: white 4px dashed; */
+  /* background-color: #ddd; */
 }
 
 @media (max-height: 500px) {
