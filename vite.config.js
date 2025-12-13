@@ -1,11 +1,11 @@
 // using code copied from https://vuetifyjs.com/en/getting-started/installation/#option-b-2014-install-via-unplugin-fonts-2b-40fontsource-recommended
 
-import { fileURLToPath, URL } from "node:url";
+import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import vueDevTools from "vite-plugin-vue-devtools";
-import ViteFonts from "unplugin-fonts/vite";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import ViteFonts from 'unplugin-fonts/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -16,9 +16,9 @@ export default defineConfig({
       fontsource: {
         families: [
           {
-            name: "Roboto",
+            name: 'Roboto',
             weights: [100, 300, 400, 500, 700, 900],
-            styles: ["normal", "italic"],
+            styles: ['normal', 'italic'],
           },
         ],
       },
@@ -26,19 +26,19 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   // server attribute code copied from ChatGPT https://chatgpt.com/c/691342fc-371c-832d-8eb1-71fcadf5972f
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://api.amigurume.me",
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "https://api.amigurume.me",
+  //       changeOrigin: true,
+  //       secure: false,
+  //       rewrite: (path) => path.replace(/^\/api/, ""),
+  //     },
+  //   },
+  // },
   // DEVTODO: uncomment above for dev testing
-});
+})
