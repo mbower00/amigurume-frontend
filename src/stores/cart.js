@@ -18,11 +18,19 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function subtractFromCart(id) {
-    const quantity = cart?.[id] || 0
-    if (quantity > 0) {
+    const quantity = cart?.[id]
+    if (quantity === 1) {
+      delete cart[id]
+    } else if (quantity > 1) {
       cart[id] = quantity - 1
     }
   }
 
-  return { cart, totalQuantity, addToCart, subtractFromCart }
+  function emptyCart() {
+    for (let id in cart) {
+      delete cart[id]
+    }
+  }
+
+  return { cart, totalQuantity, addToCart, emptyCart, subtractFromCart }
 })

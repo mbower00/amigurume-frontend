@@ -54,6 +54,7 @@ function subtractFromCart() {
           color="var(--light-blackberry)"
           icon="fa-solid fa-minus"
           :disabled="quantity <= 0"
+          variant="text"
           v-if="quantity"
         ></v-btn>
 
