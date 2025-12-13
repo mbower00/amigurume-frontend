@@ -49,6 +49,8 @@ onMounted(() => {
 
   listenerScroll.value = window.addEventListener('scroll', getOffset)
   listenerResize.value = window.addEventListener('resize', getOffset)
+
+  drawSprites()
   // TODO: Make double click flip/rotate
   // canvas.value.ondblclick = doubleClick
 })
