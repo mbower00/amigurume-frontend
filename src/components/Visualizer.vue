@@ -6,6 +6,7 @@
  - https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage
  - https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images
  - https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Transformations
+ - https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
 -->
 
 <script setup>
@@ -22,6 +23,8 @@ const isDragging = ref(false)
 const draggingSpriteIndex = ref(0)
 const startX = ref(0)
 const startY = ref(0)
+const offsetX = ref(0)
+const offsetY = ref(0)
 
 onMounted(() => {
   ctx.value = canvas.value.getContext('2d')
@@ -29,6 +32,17 @@ onMounted(() => {
   canvas.value.onmouseup = mouseUp
   canvas.value.onmouseleave = mouseUp
   canvas.value.onmousemove = mouseMove
+  canvas.value.ontouchstart = (event) => {
+    mouseDown(event, true)
+  }
+  canvas.value.ontouchend = mouseUp
+  canvas.value.ontouchcancel = (event) => {
+    mouseUp(event, true)
+  }
+  canvas.value.ontouchmove = (event) => {
+    mouseMove(event, true)
+  }
+  getOffset()
   // TODO: Make double click flip/rotate
   // canvas.value.ondblclick = doubleClick
 })
@@ -62,6 +76,16 @@ watch(prop.images, (images) => {
   savedImages.value = [...images]
 })
 
+function getOffset() {
+  const offsets = canvas.value.getBoundingClientRect()
+  offsetX.value = offsets.left
+  offsetY.value = offsets.top
+  console.log(offsetX.value, offsetY.value)
+}
+
+window.onscroll = getOffset
+window.onresize = getOffset
+
 function drawSprites() {
   ctx.value.clearRect(0, 0, canvasWidth.value, canvasHeight.value)
   for (let sprite of sprites.value) {
@@ -85,10 +109,15 @@ function isMouseInSprite(x, y, sprite) {
   return false
 }
 
-function mouseDown(event) {
+function mouseDown(event, touching) {
   event.preventDefault()
-  startX.value = event.layerX
-  startY.value = event.layerY
+  if (touching) {
+    startX.value = event.changedTouches[0].clientX - offsetX.value
+    startY.value = event.changedTouches[0].clientY - offsetY.value
+  } else {
+    startX.value = event.clientX - offsetX.value
+    startY.value = event.clientY - offsetY.value
+  }
   // reverse, so you favor the top sprite
   const reverseSprites = [...sprites.value].reverse()
   let index = reverseSprites.length - 1
@@ -110,11 +139,18 @@ function mouseUp(event) {
   isDragging.value = false
 }
 
-function mouseMove(event) {
+function mouseMove(event, touching) {
   if (!isDragging.value) return
   event.preventDefault()
-  let mouseX = event.layerX
-  let mouseY = event.layerY
+  let mouseX
+  let mouseY
+  if (touching) {
+    mouseX = event.changedTouches[0].clientX - offsetX.value
+    mouseY = event.changedTouches[0].clientY - offsetY.value
+  } else {
+    mouseX = event.clientX - offsetX.value
+    mouseY = event.clientY - offsetY.value
+  }
 
   let distanceX = mouseX - startX.value
   let distanceY = mouseY - startY.value
