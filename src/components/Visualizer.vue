@@ -48,7 +48,7 @@ onMounted(() => {
   // canvas.value.ondblclick = doubleClick
 })
 
-watch(visualizerStore.images, (images) => {
+watch(vStore.images, (images) => {
   const save = [...savedImages.value]
   // console.log('SAVE', save, 'IMAGES', images)
   for (let img of images) {
