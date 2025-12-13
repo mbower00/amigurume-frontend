@@ -63,6 +63,7 @@ onUnmounted(() => {
 })
 
 watch(vStore.images, (images) => {
+  console.log(vStore.images)
   const save = [...savedImages.value]
   // console.log('SAVE', save, 'IMAGES', images)
   for (let img of images) {
