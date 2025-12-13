@@ -63,7 +63,6 @@ onUnmounted(() => {
 })
 
 watch(vStore.images, (images) => {
-  console.log(vStore.images)
   const save = [...savedImages.value]
   // console.log('SAVE', save, 'IMAGES', images)
   for (let img of images) {
@@ -95,7 +94,6 @@ watch(vStore.images, (images) => {
 function clearVisualizer() {
   vStore.empty()
   drawSprites()
-  console.log('del')
 }
 
 function getOffset() {
@@ -220,7 +218,7 @@ function mouseMove(event, touching) {
   position: absolute;
   top: 10px;
   right: 10px;
-  color: var(--light-blackberry);
+  color: #999;
   font-size: x-small;
 }
 </style>

@@ -14,7 +14,6 @@ const inStock = computed(() => prop.product.stock > 0)
 
 function addToVisualizer() {
   vStore.images.push(prop.product.image_url)
-  console.log('here', vStore.images)
 }
 function addToCart() {
   cartStore.addToCart(prop.product.id)
