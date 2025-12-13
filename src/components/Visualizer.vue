@@ -95,6 +95,7 @@ function clearVisualizer() {
   vStore.images = []
   vStore.sprites = []
   drawSprites()
+  console.log('del')
 }
 
 function getOffset() {
