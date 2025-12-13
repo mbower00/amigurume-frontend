@@ -99,9 +99,9 @@ function clearVisualizer() {
 }
 
 function getOffset() {
-  const offsets = canvas.value.getBoundingClientRect()
-  offsetX.value = offsets.left
-  offsetY.value = offsets.top
+  const offsets = canvas.value?.getBoundingClientRect()
+  offsetX.value = offsets?.left || 0
+  offsetY.value = offsets?.top || 0
 }
 
 function drawSprites() {
