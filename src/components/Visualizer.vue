@@ -166,7 +166,7 @@ function mouseMove(event, touching) {
   const sprite = vStore.sprites.splice(draggingSpriteIndex.value, 1)[0]
   sprite.x += distanceX
   sprite.y += distanceY
-  draggingSpriteIndex.value = vStore.sprites.value.push(sprite) - 1
+  draggingSpriteIndex.value = vStore.sprites.push(sprite) - 1
 
   drawSprites()
 
@@ -193,8 +193,13 @@ function mouseMove(event, touching) {
 </script>
 
 <template>
-  <v-btn class="clear" density="compact" variant="flat" @click.stop="clearVisualizer">
-    <span class="fa-solid fa-trash"></span>
+  <v-btn
+    class="clear"
+    density="compact"
+    variant="flat"
+    icon="fa-solid fa-trash"
+    @click.stop="clearVisualizer"
+  >
   </v-btn>
   <canvas ref="canvas" width="288" height="400"></canvas>
 </template>
@@ -205,5 +210,6 @@ function mouseMove(event, touching) {
   top: 10px;
   right: 10px;
   color: var(--light-blackberry);
+  font-size: x-small;
 }
 </style>
